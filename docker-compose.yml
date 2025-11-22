@@ -1,0 +1,48 @@
+services:
+  pr-review-postgres:
+    image: postgres:16
+    container_name: pr-review-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: avito_backend
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      # ВНУТРИ Docker Postgres слушает 5432,
+      # наружу пробрасываем на 5435, чтобы не конфликтовать с твоей локальной 5434
+      - "5435:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d avito_backend"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  pr-review-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pr-review-backend
+    restart: unless-stopped
+    depends_on:
+      pr-review-postgres:
+        condition: service_healthy
+    environment:
+      # ВАЖНО: внутри Docker ходим к Postgres по имени сервиса и порту 5432
+      DB_HOST: pr-review-postgres
+      DB_PORT: "5432"
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_NAME: avito_backend
+    ports:
+      # Твой FastAPI внутри контейнера слушает 8000
+      - "8000:8000"
+    # Если в Dockerfile уже есть CMD с uvicorn, эту строку можно убрать
+    command: >
+      uvicorn app.main:app
+      --host 0.0.0.0
+      --port 8000
+
+volumes:
+  postgres_data:

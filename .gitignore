@@ -1,0 +1,72 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+.venv/
+env/
+venv/
+
+# Environment variables
+.env
+*.env
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Byte-compiled / optimized / DLL files
+*.so
+*.dylib
+
+# ---- FastAPI / SQLAlchemy ----
+instance/
+*.db
+*.sqlite3
+
+# ---- Alembic ----
+alembic/versions/__pycache__/
+alembic.ini.bak
+
+# ---- Logs ----
+*.log
+logs/
+
+# ---- Editors & IDE ----
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ---- Docker ----
+docker-compose.override.yml
+*.pid
+*.seed
+*.bak
+*.old
+
+# ---- MacOS ----
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# ---- PyCharm ----
+*.iml
+cmake-build-debug/
+out/
+
+# ---- Coverage / Reports ----
+htmlcov/
+.coverage
+coverage.xml
+.cache
+
+# ---- Wheels ----
+*.whl
+dist/
+build/
+*.egg-info/
+
+# ---- Misc ----
+tmp/
